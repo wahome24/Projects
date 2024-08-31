@@ -1,0 +1,89 @@
+---
+title: "SocialBuzz"
+author: "Wahome"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## SocialBuzz
+
+The goal of the project is to analyse the top five content categories for Social Buzz.
+Started off with 7 data sets but we shall be using a single cleaned data set.
+
+```{r}
+#Loading required library
+
+library(dplyr)
+
+```
+
+```{r}
+#Loading data
+
+df <- read.csv("C:\\Users\\USER\\Desktop\\Virtual Internships\\Data.csv")
+
+df
+
+```
+
+```{r}
+#Before summarizing the data we shall convert all strings under category to lower.
+#This is will ensure that data is grouped accordingly.
+
+df$Category <- tolower(df$Category)
+
+df
+
+```
+
+
+```{r}
+#Summarizing the data
+
+df %>%
+  select(Reaction.Score,Category) %>%
+  group_by(Category) %>%
+  summarise(sum(Reaction.Score))
+
+```
+
+```{r}
+
+#Creating a new data frame to store the results for easier sorting.
+
+summarized.df <- df %>%
+  select(Reaction.Score,Category) %>%
+  group_by(Category) %>%
+  summarise(sum(Reaction.Score))
+
+summarized.df
+
+```
+
+```{r}
+#Renaming the columns
+
+colnames(summarized.df) <- c('Category', 'Total_Reaction_Score')
+
+summarized.df
+
+```
+
+```{r}
+#Sorting the data
+
+arrange(summarized.df, desc(Total_Reaction_Score))
+
+```
+
+```{r}
+#Selecting the top five categories.
+
+head(arrange(summarized.df, desc(Total_Reaction_Score)),5)
+
+```
+
